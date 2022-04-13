@@ -1,24 +1,30 @@
+import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
 import React from 'react'
-import logo from './logo.svg'
 import './App.scss'
 
 function App () {
+  const ramp = new RampInstantSDK({
+    // for testnet:
+    url: 'https://ri-widget-staging.firebaseapp.com/',
+
+    // for IOV!
+    // swapAsset: 'RSK_RDOC',
+    userAddress: '0x3dD03d7d6c3137f1Eb7582bA5957B8a2E26f304A'.toLowerCase(), // <-- must be lowercase or checksummed!
+
+    // for the dapp:
+    hostAppName: 'Ramp POC',
+    hostLogoUrl: 'https://rampnetwork.github.io/assets/misc/test-logo.png'
+  })
+
+  const buyDoc = () => {
+    ramp.show()
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Ramp Demo!</h1>
+
+      <button onClick={buyDoc}>Buy!</button>
     </div>
   )
 }
