@@ -46,7 +46,11 @@ function App () {
             <tbody>
               <tr>
                 <th>Address</th>
-                <td>{address}</td>
+                <td>
+                  <a href={`https://explorer.testnet.rsk.co/address/${address}`} target="_blank" rel="noreferrer">
+                    {address}
+                  </a>
+                </td>
               </tr>
               <tr>
                 <th>rDoc Balance</th>
