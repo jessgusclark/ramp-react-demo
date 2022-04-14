@@ -25,20 +25,12 @@ const erc20AbiPartial = [
 const provider = new ethers.providers.JsonRpcProvider('https://public-node.testnet.rsk.co')
 const rDocAddress = '0xc3de9f38581f83e281f260d0ddbaac0e102ff9f8'
 const rDocContract = new ethers.Contract(rDocAddress, erc20AbiPartial, provider)
-const rDocDecimals = 18
 
-export const getRDocBalance = (address: string): Promise<string> => {
-  console.log('getting balance yo!', address)
-  console.log(rDocContract)
+export const getRDocBalance = (address: string): Promise<string> =>
+  rDocContract.balanceOf(address.toLowerCase())
+    .then((response: BigNumber) => balanceToString(response, 18))
 
-  return rDocContract.balanceOf(address.toLowerCase())
-    .then((response: BigNumber) => {
-      console.log(response)
-      return balanceToString(response, 18)
-    })
-}
-
-// borrowed from the SmartWallet
+// borrowed from the SmartWallet:
 const balanceToString = (
   balance: BigNumber,
   numberOfDecimals: number
@@ -50,7 +42,7 @@ const balanceToString = (
       .mod(pot)
       .toString()
       .padStart(Number(numberOfDecimals.toString()), '0')
-      .slice(0, 4)
+      .slice(0, 8)
   }
 
   return `${parts.integerPart}.${parts.decimalPart}`

@@ -1,8 +1,8 @@
-import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
 import RLogin from '@rsksmart/rlogin'
 import React, { useState } from 'react'
 import './App.scss'
 import { getProviderAddress } from './lib/provider'
+import { buyDoc } from './lib/ramp'
 import { getRDocBalance } from './lib/rdoc'
 
 const rLogin = new RLogin({
@@ -29,23 +29,9 @@ function App () {
       .catch(console.log)
   }
 
-  const buyDoc = () => {
-    const ramp = new RampInstantSDK({
-      // for testnet:
-      // url: 'https://ri-widget-staging.firebaseapp.com/',
-      url: 'https://ri-widget-staging.web.app/',
-
-      // for IOV:
-      swapAsset: 'RSK_RDOC',
-      // userAddress must be lowercase or checksummed correctly:
-      userAddress: address,
-
-      // for the dapp:
-      hostAppName: 'Ramp POC',
-      hostLogoUrl: 'https://rampnetwork.github.io/assets/misc/test-logo.png'
-    })
-
-    ramp.on('*', event => console.log(event)).show()
+  const refreshBalance = () => {
+    setRDocBalance('LOADING')
+    getRDocBalance(address).then(setRDocBalance)
   }
 
   return (
@@ -66,14 +52,14 @@ function App () {
                 <th>rDoc Balance</th>
                 <td>{rDocBalance}</td>
                 <td>
-                  <button onClick={() => getRDocBalance(address).then(setRDocBalance)}>
+                  <button onClick={refreshBalance}>
                     refresh
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
-          <button onClick={buyDoc}>Buy RDOC!</button>
+          <button onClick={() => buyDoc(address)}>Buy RDOC!</button>
         </div>
       )}
     </div>
