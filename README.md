@@ -8,7 +8,19 @@
 
 ## Description:
 
-@TBD
+This is a very simple proof of concept using ramp to purchase rDOC inside of a dapp. For this example, after connecting with [rLogin](https://github.com/rsksmart/rlogin), the user can then buy rDOC through Ramp. The (checksummed) address is passed to their widget and the user completes the transaction there.
+
+For testing the bank transfer, use the following steps:
+
+1. click 'buy rDOC'
+2. change the amounts if you want and **click proceed**
+3. enter your email address and confirm if needed
+4. under 'Endter your RSK Wallet address', this address is passed from the provider given by rLogin.
+5. on choose payment method, **change country to *test***, then click on **manual bank transfer**, click **proceed**.
+6. click **buy now**
+7. click the checkbox **I've transferred the funds...** then click **complete**
+8. click on **view reciept** and in the new window scroll all the way to the bottom and click on **Release the funds (test environments only)**.
+
 
 ## Available Scripts
 
