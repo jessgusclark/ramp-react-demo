@@ -1,5 +1,6 @@
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
 import RLogin from '@rsksmart/rlogin'
+import { toChecksumAddress } from '@rsksmart/rsk-utils'
 import React, { useState } from 'react'
 import './App.scss'
 
@@ -20,7 +21,9 @@ function App () {
         console.log('response:', rLoginResponse)
         setProvider(rLoginResponse.provider)
         rLoginResponse.provider.request({ method: 'eth_accounts' })
-          .then((addresses: string[]) => setAddress(addresses[0]))
+          .then((addresses: string[]) => setAddress(
+            toChecksumAddress(addresses[0], 31)
+          ))
       })
       .catch(console.log)
   }
@@ -34,7 +37,7 @@ function App () {
       // for IOV:
       swapAsset: 'RSK_RDOC',
       // userAddress must be lowercase or checksummed correctly:
-      userAddress: address.toLowerCase(),
+      userAddress: address,
 
       // for the dapp:
       hostAppName: 'Ramp POC',
