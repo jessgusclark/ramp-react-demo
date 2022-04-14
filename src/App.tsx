@@ -1,8 +1,9 @@
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
 import RLogin from '@rsksmart/rlogin'
-import { toChecksumAddress } from '@rsksmart/rsk-utils'
 import React, { useState } from 'react'
 import './App.scss'
+import { getProviderAddress } from './lib/provider'
+import { getRDocBalance } from './lib/rdoc'
 
 const rLogin = new RLogin({
   rpcUrls: {
@@ -14,16 +15,16 @@ const rLogin = new RLogin({
 function App () {
   const [provider, setProvider] = useState(null)
   const [address, setAddress] = useState<string>('')
+  const [rDocBalance, setRDocBalance] = useState<string>('LOADING')
 
   const connectToWallet = () => {
     rLogin.connect()
-      .then((rLoginResponse: any) => {
-        console.log('response:', rLoginResponse)
-        setProvider(rLoginResponse.provider)
-        rLoginResponse.provider.request({ method: 'eth_accounts' })
-          .then((addresses: string[]) => setAddress(
-            toChecksumAddress(addresses[0], 31)
-          ))
+      .then(({ provider }) => {
+        setProvider(provider)
+        getProviderAddress(provider).then((addr: string) => {
+          setAddress(addr)
+          getRDocBalance(addr).then(setRDocBalance)
+        })
       })
       .catch(console.log)
   }
@@ -56,14 +57,21 @@ function App () {
       {provider && (
         <div>
           <table>
-            <tr>
-              <th>Address</th>
-              <td>{address}</td>
-            </tr>
-            <tr>
-              <th>rDoc Balance</th>
-              <td>0</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th>Address</th>
+                <td>{address}</td>
+              </tr>
+              <tr>
+                <th>rDoc Balance</th>
+                <td>{rDocBalance}</td>
+                <td>
+                  <button onClick={() => getRDocBalance(address).then(setRDocBalance)}>
+                    refresh
+                  </button>
+                </td>
+              </tr>
+            </tbody>
           </table>
           <button onClick={buyDoc}>Buy RDOC!</button>
         </div>
